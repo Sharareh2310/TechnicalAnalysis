@@ -1,0 +1,54 @@
+---
+title: "BDA400 Assignment 2 - Technical Analysis using R"
+author: "Sharareh Khoramirouz"
+output: html_document
+---
+
+# Preliminary Stage
+
+This R Markdown document loads the portfolio, imports stock-market data, calculates the required descriptive statistics, and displays stock charts.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(quantmod)
+library(TTR)
+source("technical_analysis.R")
+```
+
+# Portfolio
+
+```{r portfolio}
+readLines("portfolio.txt")
+```
+
+# Load Stock Data
+
+```{r load-data}
+stocks <- load_stock_data()
+names(stocks)
+```
+
+# Display Imported Data
+
+```{r display-data}
+display_stock_data(stocks)
+```
+
+# Calculate Statistics
+
+```{r statistics}
+statistics <- do.call(
+  rbind,
+  lapply(names(stocks), function(symbol) {
+    calculate_statistics(stocks[[symbol]], symbol)
+  })
+)
+statistics
+```
+
+# Visualizations
+
+```{r charts}
+for (symbol in names(stocks)) {
+  plot_stock(stocks[[symbol]], symbol)
+}
+```
